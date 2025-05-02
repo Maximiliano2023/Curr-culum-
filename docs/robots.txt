@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://maximiliano2023.github.io/Curr-culum-/sitemap.xml
