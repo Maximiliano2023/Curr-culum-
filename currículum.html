@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario de Currículum</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #7ed69e; padding: 20px; }
+    h1, h3 { text-align: center; color: #333; }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input, textarea, select {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    label { margin-top: 15px; display: block; font-weight: bold; }
+    .bloque, .exp, .curso, .uni, .idioma {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+    .agregar {
+      margin-top: 10px;
+      background: #555;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #whatsapp-btn {
+      text-align: center;
+      margin-top: 30px;
+    }
+    #whatsapp-btn button {
+      background-color: #25D366;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .galeria-modelos {
+      max-width: 800px;
+      margin: 20px auto;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .modelo {
+      display: inline-block;
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      transition: border 0.3s;
+    }
+    .modelo img {
+      width: 150px;
+      height: auto;
+      border-radius: 10px;
+    }
+    .modelo.seleccionado {
+      border: 3px solid #25D366;
+    }
+
+    .flechas {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .flecha {
+      font-size: 30px;
+      cursor: pointer;
+      color: #333;
+      margin: 0 20px;
+    }
+
+    .mensaje-info {
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Formulario de Currículum</h1>
+  <h3>Elegí un modelo de currículum</h3>
+  <p style="text-align:center; color:#333;">(Deslizá hacia los lados para ver más modelos)</p>
+  <div class="galeria-modelos" id="galeriaModelos"></div>
+  <div class="flechas">
+    <span class="flecha" id="flechaIzquierda">&#8592;</span>
+    <span class="flecha" id="flechaDerecha">&#8594;</span>
+  </div>
+  <input type="hidden" name="modelo_elegido" id="modeloElegido" />
+  
+  <!-- Mensaje informativo -->
+  <div class="mensaje-info">
+    <p>Hola, ¿cómo estás? Para armar el currículum cobro 4000 mil pesos y en menos de 12 hrs estará armado y te lo paso en PDF. Si estás conforme y de acuerdo, completa el formulario y luego haz clic en enviar.</p>
+  </div>
+
+  <form id="formulario">
+    <label>Nombre y apellido</label>
+    <input type="text" name="nombre" required />
+
+    <label>Email</label>
+    <input type="email" name="email" required />
+
+    <label>Teléfono</label>
+    <input type="text" name="telefono" />
+
+    <label>Dirección y localidad</label>
+    <input type="text" name="direccion" />
+
+    <label>Escuela primaria</label>
+    <input type="text" name="primaria" placeholder="Nombre de la escuela" />
+    <input type="text" name="anioPrimaria" placeholder="Año de ingreso y egreso" />
+
+    <label>Escuela secundaria</label>
+    <input type="text" name="secundaria" placeholder="Nombre de la escuela" />
+    <input type="text" name="anioSecundaria" placeholder="Año de ingreso y egreso" />
+
+    <div id="cursos">
+      <label>Cursos</label>
+      <div class="curso">
+        <input type="text" name="curso_nombre[]" placeholder="Curso realizado" />
+        <input type="text" name="curso_localidad[]" placeholder="Localidad" />
+        <input type="text" name="curso_inicio[]" placeholder="Mes y año de ingreso" />
+        <input type="text" name="curso_egreso[]" placeholder="Mes y año de egreso" />
+        <input type="text" name="curso_titulo[]" placeholder="Título recibido" />
+      </div>
+    </div>
+    <button type="button" class="agregar" onclick="agregarCurso()">+ Añadir otro curso</button>
+
+    <div id="universidades">
+      <label>Universidad</label>
+      <div class="uni">
+        <input type="text" name="uni_nombre[]" placeholder="Nombre de la carrera" />
+        <input type="text" name="uni_inicio[]" placeholder="Año de ingreso" />
+        <input type="text" name="uni_egreso[]" placeholder="Año de egreso" />
+        <input type="text" name="uni_titulo[]" placeholder="Título obtenido" />
+      </div>
+    </div>
+    <button type="button" class="agregar" onclick="agregarUni()">+ Añadir otra universidad</button>
+
+    <div id="idiomas">
+      <label>Idiomas</label>
+      <div class="idioma">
+        <input type="text" name="idioma_nombre[]" placeholder="Idioma" />
+        <input type="text" name="idioma_nivel[]" placeholder="Nivel (básico, intermedio, avanzado)" />
+      </div>
+    </div>
+    <button type="button" class="agregar" onclick="agregarIdioma()">+ Añadir otro idioma</button>
+
+    <label>Foto (formato PNG o JPG)</label>
+    <input type="file" name="foto" accept="image/png, image/jpeg" required />
+
+    <div id="experiencias">
+      <label>Experiencia Laboral</label>
+      <div class="exp">
+        <input type="text" name="exp_empresa[]" placeholder="Nombre de la empresa" />
+        <input type="text" name="exp_puesto[]" placeholder="Puesto" />
+        <textarea name="exp_tareas[]" placeholder="Tareas realizadas en el sector"></textarea>
+        <input type="text" name="exp_inicio[]" placeholder="Año de ingreso" />
+        <input type="text" name="exp_egreso[]" placeholder="Año de egreso" />
+      </div>
+    </div>
+    <button type="button" class="agregar" onclick="agregarExp()">+ Añadir otra experiencia</button>
+  </form>
+
+  <div id="whatsapp-btn">
+    <button onclick="enviarWhatsApp()">Enviar por WhatsApp</button>
+  </div>
+
+  <script>
+    const urls = [
+      "https://marketplace.canva.com/EAFnMaExwbk/2/0/1236w/canva-curr%C3%ADculum-vitae-cv-de-administraci%C3%B3n-simple-azul-aFz_YeZHLfQ.jpg",
+      "https://marketplace.canva.com/EAFWS3n4loo/2/0/1236w/canva-curr%C3%ADculum-vitae-cv-de-contabilidad-minimalista-azul-Gni58z0ZjqI.jpg",
+      "https://marketplace.canva.com/EAGJy5iKxmI/1/0/1131w/canva-curr%C3%ADculum-vitae-asesor-financiero-profesional-corporativo-azul-y-gris-gV71mJsOR0U.jpg",
+      "https://marketplace.canva.com/EAFhUypjiKg/2/0/1131w/canva-curr%C3%ADculum-vitae-cv-dise%C3%B1adora-y-arquitecta-minimalista-rosa-Y839yD8aTTc.jpg",
+      "https://marketplace.canva.com/EAFHud6Zi8g/1/0/1131w/canva-curriculum-vitae-cv-profesional-con-foto-azul-y-blanco-A1ibCKjvR2I.jpg",
+      "https://marketplace.canva.com/EAFAV5wm11Q/1/0/1131w/canva-curriculum-vitae-cv-trabajo-ZrzlglHk_l4.jpg",
+      "https://marketplace.canva.com/EAE_JQ0j_RY/3/0/1131w/canva-curriculum-vitae-profesional-mujer-con-iconos-moderno-beige-y-blanco-Sz-Tb0O8GXU.jpg"
+    ];
+
+    const galeria = document.getElementById("galeriaModelos");
+    urls.forEach((url, index) => {
+      const div = document.createElement("div");
+      div.className = "modelo";
+      div.innerHTML = `<img src="${url}" alt="Modelo ${index + 1}" data-url="${url}"/>`;
+      div.onclick = () => {
+        document.querySelectorAll(".modelo").forEach(m => m.classList.remove("seleccionado"));
+        div.classList.add("seleccionado");
+        document.getElementById("modeloElegido").value = url;
+      };
+      galeria.appendChild(div);
+    });
+
+    // Función para navegar por las flechas
+    document.getElementById("flechaIzquierda").onclick = () => {
+      galeria.scrollLeft -= 200;
+    };
+    document.getElementById("flechaDerecha").onclick = () => {
+      galeria.scrollLeft += 200;
+    };
+
+    function agregarCurso() {
+      const div = document.createElement("div");
+      div.className = "curso";
+      div.innerHTML = `
+        <input type="text" name="curso_nombre[]" placeholder="Curso realizado" />
+        <input type="text" name="curso_localidad[]" placeholder="Localidad" />
+        <input type="text" name="curso_inicio[]" placeholder="Mes y año de ingreso" />
+        <input type="text" name="curso_egreso[]" placeholder="Mes y año de egreso" />
+        <input type="text" name="curso_titulo[]" placeholder="Título recibido" />
+      `;
+      document.getElementById("cursos").appendChild(div);
+    }
+
+    function agregarUni() {
+      const div = document.createElement("div");
+      div.className = "uni";
+      div.innerHTML = `
+        <input type="text" name="uni_nombre[]" placeholder="Nombre de la carrera" />
+        <input type="text" name="uni_inicio[]" placeholder="Año de ingreso" />
+        <input type="text" name="uni_egreso[]" placeholder="Año de egreso" />
+        <input type="text" name="uni_titulo[]" placeholder="Título obtenido" />
+      `;
+      document.getElementById("universidades").appendChild(div);
+    }
+
+    function agregarIdioma() {
+      const div = document.createElement("div");
+      div.className = "idioma";
+      div.innerHTML = `
+        <input type="text" name="idioma_nombre[]" placeholder="Idioma" />
+        <input type="text" name="idioma_nivel[]" placeholder="Nivel (básico, intermedio, avanzado)" />
+      `;
+      document.getElementById("idiomas").appendChild(div);
+    }
+
+    function agregarExp() {
+      const div = document.createElement("div");
+      div.className = "exp";
+      div.innerHTML = `
+        <input type="text" name="exp_empresa[]" placeholder="Nombre de la empresa" />
+        <input type="text" name="exp_puesto[]" placeholder="Puesto" />
+        <textarea name="exp_tareas[]" placeholder="Tareas realizadas en el sector"></textarea>
+        <input type="text" name="exp_inicio[]" placeholder="Año de ingreso" />
+        <input type="text" name="exp_egreso[]" placeholder="Año de egreso" />
+      `;
+      document.getElementById("experiencias").appendChild(div);
+    }
+
+    function enviarWhatsApp() {
+      const f = document.getElementById("formulario");
+      const datos = new FormData(f);
+      let mensaje = "Hola! Quiero generar mi currículum:\n";
+      for (const [key, value] of datos.entries()) {
+        if (value && !key.includes("foto")) {
+          mensaje += `• ${key.replace(/_/g, " ")}: ${value}\n`;
+        }
+      }
+      const modelo = document.getElementById("modeloElegido").value;
+      if (modelo) {
+        mensaje += `\nModelo elegido: ${modelo}`;
+      }
+      mensaje += "\n\nPrecio: $4000";
+      const url = `https://wa.me/5491168247936?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
